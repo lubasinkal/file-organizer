@@ -4,3 +4,4 @@ build/
 *.spec
 config.db
 *.iss
+Output/
