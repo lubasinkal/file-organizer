@@ -140,7 +140,7 @@ if len(sys.argv) > 1:
     else:
         print("Unknown command. Available commands: addpath, deletepath, listpaths, organize")
 else:
-    print("Usage: main.py <command>")
+    print("Usage: organize-files <command>")
     print("Commands:")
     print("  addpath <directory_path>   Add a new directory path.")
     print("  deletepath <index>         Delete a directory path by index.")
