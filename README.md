@@ -111,4 +111,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For any questions or issues, please contact:
 - **Name:** Lubasi Nkalolang
 - **Email:** lubasinkal@outlook.com
-- **GitHub:** [your-username](https://github.com/lubasinkal)
+- **GitHub:** [lubasinkal](https://github.com/lubasinkal)
