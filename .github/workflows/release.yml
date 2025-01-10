@@ -38,6 +38,8 @@ jobs:
             mv dist/main.exe dist/gniphyl.exe
           elif [ "${{ matrix.os }}" == "macos-latest" ]; then
             mv dist/main dist/gniphyl
+          elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            mv dist/main dist/gniphyl-linux
           fi
 
       - name: Upload Executable to GitHub Release
@@ -48,4 +50,4 @@ jobs:
           files: |
             ${{ matrix.os == 'windows-latest' && 'dist/gniphyl.exe' || '' }}
             ${{ matrix.os == 'macos-latest' && 'dist/gniphyl' || '' }}
-            ${{ matrix.os == 'ubuntu-latest' && 'dist/main' || '' }}
+            ${{ matrix.os == 'ubuntu-latest' && 'dist/gniphyl-linux' || '' }}
