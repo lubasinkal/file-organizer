@@ -11,6 +11,14 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 app = typer.Typer()
 console = Console()
 
+# Custom error handling
+# @app.callback(invoke_without_command=True)
+# def main(ctx: typer.Context):
+#     if ctx.invoked_subcommand is None:
+#         console.print("[bold red]Error:[/bold red] Missing command.\n")
+#         console.print("Use [bold cyan]'main.py --help'[/bold cyan] for available commands.")
+#         raise typer.Exit()
+
 def config_folder(name: str) -> str:
     """Creates and Returns the Respective config folders per OS."""
     if platform.system() == "Windows":
