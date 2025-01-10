@@ -6,7 +6,7 @@ on:
       - 'v*'  # Run on version tag pushes (e.g., v1.0.0)
   pull_request:
     branches:
-      - typer  # Optionally, you can also trigger builds on PRs to the main branch
+      - main  # Optionally, you can also trigger builds on PRs to the main branch
 
 jobs:
   build:
