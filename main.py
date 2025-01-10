@@ -3,8 +3,13 @@ import os
 import platform
 import toml
 import shutil
-from rich import print
+from rich.console import Console
+from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
+
+# Initialize Typer app and Rich console
+app = typer.Typer()
+console = Console()
 
 def config_folder(name: str) -> str:
     """Creates and Returns the Respective config folders per OS."""
@@ -21,9 +26,6 @@ def config_folder(name: str) -> str:
         return config_path
     else:
         raise NotImplementedError(f"Unsupported system: {platform.system()}")
-
-# Initialize Typer app
-app = typer.Typer()
 
 # Define the application name and config file path
 app_name = "fileOrg"
@@ -55,40 +57,45 @@ def organize(path):
         'others': []
     }
     if not os.path.exists(path):
-        print(f"{path} does not exist.")
+        console.print(f"[bold red]{path} does not exist.[/bold red]")
         return
 
     files = os.listdir(path)
-    print(f"Organizing files in directory: {path}")
+    console.print(f"[bold green]Organizing files in directory: {path}[/bold green]")
 
-    for item in files:
-        item_path = os.path.join(path, item)
-        if os.path.isfile(item_path):
-            _, file_extension = os.path.splitext(item)
-            file_extension = file_extension[1:].lower()
+    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
+        task = progress.add_task("Organizing files...", total=len(files))
 
-            # Determine category
-            category = "others"
-            for cat, ext_list in extensions.items():
-                if file_extension in ext_list:
-                    category = cat
-                    break
+        for item in files:
+            item_path = os.path.join(path, item)
+            if os.path.isfile(item_path):
+                _, file_extension = os.path.splitext(item)
+                file_extension = file_extension[1:].lower()
 
-            # Create category folder and move file
-            folder_path = os.path.join(path, category)
-            os.makedirs(folder_path, exist_ok=True)
+                # Determine category
+                category = "others"
+                for cat, ext_list in extensions.items():
+                    if file_extension in ext_list:
+                        category = cat
+                        break
 
-            dest_path = os.path.join(folder_path, item)
-            counter = 1
-            while os.path.exists(dest_path):
-                base, ext = os.path.splitext(item)
-                dest_path = os.path.join(folder_path, f"{base}_{counter}{ext}")
-                counter += 1
+                # Create category folder and move file
+                folder_path = os.path.join(path, category)
+                os.makedirs(folder_path, exist_ok=True)
 
-            try:
-                shutil.move(item_path, dest_path)
-            except (shutil.Error, PermissionError) as e:
-                print(f"Skipping {item} due to error: {e}.")
+                dest_path = os.path.join(folder_path, item)
+                counter = 1
+                while os.path.exists(dest_path):
+                    base, ext = os.path.splitext(item)
+                    dest_path = os.path.join(folder_path, f"{base}_{counter}{ext}")
+                    counter += 1
+
+                try:
+                    shutil.move(item_path, dest_path)
+                except (shutil.Error, PermissionError) as e:
+                    console.print(f"[bold yellow]Skipping {item} due to error: {e}.[/bold yellow]")
+
+            progress.update(task, advance=1)
 
 # Typer commands
 @app.command(short_help="Add paths to organise")
@@ -100,9 +107,9 @@ def add(name: str):
     if name not in config["paths"]:
         config["paths"].append(name)
         save_config(config)
-        print(f"Added {name}")
+        console.print(f"[bold green]Added {name}[/bold green]")
     else:
-        print(f"Path {name} is already in the configuration.")
+        console.print(f"[bold yellow]Path {name} is already in the configuration.[/bold yellow]")
 
 @app.command(short_help="Remove path")
 def rm(name: str):
@@ -111,9 +118,9 @@ def rm(name: str):
     if "paths" in config and name in config["paths"]:
         config["paths"].remove(name)
         save_config(config)
-        print(f"Removed {name}")
+        console.print(f"[bold green]Removed {name}[/bold green]")
     else:
-        print(f"Path {name} not found in the configuration.")
+        console.print(f"[bold yellow]Path {name} not found in the configuration.[/bold yellow]")
 
 @app.command(short_help="List paths")
 def list():
@@ -121,11 +128,16 @@ def list():
     config = load_config()
     paths = config.get("paths", [])
     if paths:
-        print("Configured paths:")
-        for path in paths:
-            print(f" - {path}")
+        table = Table(title="Configured Paths", show_lines=True)
+        table.add_column("Index", style="cyan", justify="center")
+        table.add_column("Path", style="magenta")
+
+        for i, path in enumerate(paths, 1):
+            table.add_row(str(i), path)
+
+        console.print(table)
     else:
-        print("No paths configured.")
+        console.print("[bold yellow]No paths configured.[/bold yellow]")
 
 @app.command(short_help="Organise action")
 def run():
@@ -133,11 +145,11 @@ def run():
     config = load_config()
     paths = config.get("paths", [])
     if not paths:
-        print("No paths configured. Please add paths first.")
+        console.print("[bold red]No paths configured. Please add paths first.[/bold red]")
     else:
-        print("Organising the following paths:")
+        console.print("[bold green]Organising the following paths:[/bold green]")
         for path in paths:
-            print(f" - {path}")
+            console.print(f" - [cyan]{path}[/cyan]")
             organize(path)
 
 if __name__ == "__main__":
