@@ -35,10 +35,11 @@ jobs:
     - name: Build executable with PyInstaller
       run: |
         pyinstaller --onefile main.py  # Adjust with your script name
+        ren dist\main.exe dist\gniphyl.exe  # Rename the file on Windows
 
     # Create a new GitHub Release and upload the executable
     - name: Create GitHub Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/main.exe  # Ensure the correct file path
+        files: dist/gniphyl.exe  # Ensure the correct file path
