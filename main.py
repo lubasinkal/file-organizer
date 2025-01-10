@@ -121,7 +121,7 @@ def organize(path):
     files = os.listdir(path)
     console.print(f"[bold green]Organizing files in directory: {path}[/bold green]")
 
-    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
+    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"),transient=True) as progress:
         task = progress.add_task("Organizing files...", total=len(files))
 
         for item in files:
@@ -154,7 +154,9 @@ def organize(path):
                     console.print(f"[bold yellow]Skipping {item} due to error: {e}.[/bold yellow]")
 
             progress.update(task, advance=1)
-
+		# When the task is completed, stop the progress and display a message
+        progress.stop()
+        console.print("\n[bold yellow]Gniphly run Completed[/bold yellow]")
 # Typer commands
 @app.command(short_help="Add paths to organise")
 def add(name: str):
