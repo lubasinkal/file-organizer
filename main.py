@@ -6,17 +6,67 @@ import shutil
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.panel import Panel
 
 # Initialize Typer app and Rich console
 app = typer.Typer()
 console = Console()
 
 #Custom error handling
+# @app.callback(invoke_without_command=True)
+# def main(ctx: typer.Context):
+#     if ctx.invoked_subcommand is None:
+#         console.print("[bold red]Error:[/bold red] Missing command.\n")
+#         console.print("Use [bold cyan]'main.py --help'[/bold cyan] for available commands.")
+#         raise typer.Exit()
+
+
+def show_help():
+    """Displays detailed help information about the CLI tool."""
+    
+    console.print(
+        Panel(
+            Text(
+                "Gniphyl CLI\n\n"
+                "This tool is designed to help you organize your files efficiently.\n"
+                "You can add paths, list them, and perform other operations.\n",
+                justify="left",
+                style="bold cyan",
+            ),
+            title="Usage",
+        )
+    )
+	# Adding the tagline in its own color
+    console.print("[bold purple] Made by Gnitly ;)  https://gnitly.com[/bold purple]\n")
+
+    console.print(
+        Text(
+            "Usage: gniphyl.py [COMMAND] [ARGS]\n"
+            "       gniphyl.py --help  # Show this detailed help message\n",
+            style="bold yellow",
+        )
+    )
+
+    console.print("[bold underline]Commands:[/bold underline]\n")
+    table = Table(title="Available Commands", title_style="bold magenta")
+    table.add_column("Command", style="bold cyan", justify="left")
+    table.add_column("Description", justify="left")
+
+    table.add_row("add", "Add a new path to the configuration.")
+    table.add_row("list", "List all configured paths.")
+    table.add_row("remove", "Remove a path from the configuration.")
+    table.add_row("clear", "Clear all paths.")
+    table.add_row("--help", "Show this help message.")
+
+    console.print(table)
+    console.print("\nUse [bold cyan]gniphyl.py COMMAND --help[/bold cyan] for more details about a specific command.")
+    console.print("\nFor example:\n  gniphyl.py add --help\n", style="dim")
+
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context):
     if ctx.invoked_subcommand is None:
-        console.print("[bold red]Error:[/bold red] Missing command.\n")
-        console.print("Use [bold cyan]'main.py --help'[/bold cyan] for available commands.")
+        show_help()
         raise typer.Exit()
 
 def config_folder(name: str) -> str:
