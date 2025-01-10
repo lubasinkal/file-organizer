@@ -30,30 +30,37 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller  # Install PyInstaller to build executables
 
-    - name: Build Executable
+    - name: Build Executable for Linux
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        pyinstaller --onefile main.py  # Build the executable
+        pyinstaller --onefile main.py  # Build the executable for Linux
 
-    - name: Upload Executable to GitHub Release
-      if: success() && matrix.os == 'ubuntu-latest'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: dist/your_script  # Specify the path to the executable in dist/
-
-    - name: Upload Executable to Windows Release
-      if: success() && matrix.os == 'windows-latest'
+    - name: Build Executable for Windows
+      if: matrix.os == 'windows-latest'
       run: |
         pyinstaller --onefile main.py
         mv dist/main.exe dist/gniphyl.exe  # Rename for clarity
-      uses: softprops/action-gh-release@v1
-      with:
-        files: dist/gnipyhl.exe
 
-    - name: Upload Executable to macOS Release
-      if: success() && matrix.os == 'macos-latest'
+    - name: Build Executable for macOS
+      if: matrix.os == 'macos-latest'
       run: |
         pyinstaller --onefile main.py
         mv dist/main dist/gniphyl  # Rename for clarity
+
+    - name: Upload Executable to GitHub Release for Linux
+      if: success() && matrix.os == 'ubuntu-latest'
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/gniphyl
+        files: dist/main  # Specify the path to the executable in dist/
+
+    - name: Upload Executable to GitHub Release for Windows
+      if: success() && matrix.os == 'windows-latest'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/gniphyl.exe  # Correct path to the Windows executable
+
+    - name: Upload Executable to GitHub Release for macOS
+      if: success() && matrix.os == 'macos-latest'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/gniphyl  # Correct path to the macOS executable
