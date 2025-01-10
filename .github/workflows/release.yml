@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]  # Run on multiple OSes
+        os: [ubuntu-latest, macos-latest]  # Run on multiple OSes
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -34,9 +34,7 @@ jobs:
       - name: Build Executable
         run: |
           pyinstaller --onefile main.py
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            mv dist/main.exe dist/gniphyl.exe
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
             mv dist/main dist/gniphyl
           elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             mv dist/main dist/gniphyl-linux
@@ -48,6 +46,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use your PAT secret here
         with:
           files: |
-            ${{ matrix.os == 'windows-latest' && 'dist/gniphyl.exe' || '' }}
             ${{ matrix.os == 'macos-latest' && 'dist/gniphyl' || '' }}
             ${{ matrix.os == 'ubuntu-latest' && 'dist/gniphyl-linux' || '' }}
