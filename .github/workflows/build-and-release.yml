@@ -35,7 +35,11 @@ jobs:
     - name: Build executable with PyInstaller
       run: |
         pyinstaller --onefile main.py  # Adjust with your script name
-        ren dist\main.exe dist\gniphyl.exe  # Rename the file on Windows
+
+    # Copy the executable file to the desired name
+    - name: Copy executable
+      run: |
+        powershell -Command "Copy-Item dist\main.exe -Destination dist\gniphyl.exe"
 
     # Create a new GitHub Release and upload the executable
     - name: Create GitHub Release
