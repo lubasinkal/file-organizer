@@ -1,66 +1,107 @@
-# File Organizer
+# Gniphyl
 
-File Organizer is a Python-based tool designed to manage and organize files within specified directories. It provides a command-line interface to add, delete, list, and organize directories, ensuring your files are neatly sorted based on their type.
+Gniphyl is a cross-platform command-line interface (CLI) tool that allows users to organize files within specified directories. It enables users to add, delete, list, and organize directories, ensuring that files are neatly sorted based on their type (e.g., `images`, `videos`, `documents`). This tool is available as an executable for **Windows**, **macOS**, and **Linux**.
 
 ---
 
 ## Features
 
-- Add directory paths to a database.
+- Add directory paths to a configuration file.
 - Delete paths by their index.
 - List all configured paths.
-- Organize files in directories into categorized folders based on their extensions.
+- Organize files into categorized folders based on their extensions (e.g., `images`, `videos`, `documents`).
 
 ---
 
 ## Installation
 
 ### Prerequisites
-- Python 3.6 or higher
-- SQLite (pre-installed with Python)
+- No installation of Python required if using the precompiled executables.
+- For **Windows**, **macOS**, and **Linux**, you can download the respective executables.
+- To build from source, ensure **Python 3.6** or higher is installed.
 
-### Steps
-1. Clone the repository:
+### Steps to Install the Executables
+
+1. **Clone the repository** (only required if you plan to build from source):
    ```bash
-   git clone https://github.com/lubasinkal/file-organizer.git
-   cd file-organizer
+   git clone https://github.com/lubasinkal/gniphyl.git
+   cd gniphyl
    ```
-2. Install dependencies:
+
+2. **Install dependencies** (if building from source):
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the script:
-   ```bash
-   python main.py
-   ```
+
+3. **Download the Executables** from the [Releases](https://github.com/lubasinkal/gniphyl/releases) section:
+
+   - **For Windows**: Download `gniphyl.exe`.
+   - **For macOS**: Download `gniphyl`.
+   - **For Linux**: Download `gniphyl-linux`.
+
+4. **Move Executables to a Directory in the PATH**:
+
+   To make it easier to run the `gniphyl` commands from any terminal session, move the downloaded executable to a directory that is part of your system's `PATH`.
+
+   #### On **Windows**:
+   - Move `gniphyl.exe` to a directory like `C:\Windows\System32` or another directory already in your system’s `PATH`.
+   - Alternatively, add the directory where `gniphyl.exe` is located to your system’s `PATH` environment variable.
+
+     To add a directory to the `PATH`:
+     1. Right-click on **This PC** or **Computer** and select **Properties**.
+     2. Select **Advanced system settings**.
+     3. Click the **Environment Variables** button.
+     4. In the **System variables** section, scroll to find the `Path` variable and click **Edit**.
+     5. Add the path to the directory containing `gniphyl.exe` and click **OK**.
+
+   #### On **macOS** and **Linux**:
+   - Move the executable to `/usr/local/bin` (or another directory in your system’s `PATH`).
+     ```bash
+     sudo mv gniphyl /usr/local/bin/
+     ```
+     For **Linux**:
+     ```bash
+     sudo mv gniphyl-linux /usr/local/bin/
+     ```
+   - Ensure the executable is accessible by running:
+     ```bash
+     sudo chmod +x /usr/local/bin/gniphyl
+     ```
+
+     For **Linux**:
+     ```bash
+     sudo chmod +x /usr/local/bin/gniphyl-linux
+     ```
 
 ---
 
 ## Usage
 
-Run the tool from the command line using the following commands:
+### Run as a CLI Tool
+
+The tool is a command-line utility, which means it is run from the terminal/command prompt. Use the following commands to interact with the tool:
 
 ### Add a New Path
 ```bash
-python main.py addpath <directory_path>
+gniphyl add <directory_path>
 ```
-Adds a directory path to the database.
+Adds a directory path to the configuration.
 
 ### Delete a Path
 ```bash
-python main.py deletepath <index>
+gniphyl rm <index>
 ```
-Deletes a path by its index number (use `listpaths` to see indices).
+Deletes a path by its index number (use `gniphyl list` to see indices).
 
 ### List All Paths
 ```bash
-python main.py listpaths
+gniphyl list
 ```
-Lists all paths stored in the database.
+Lists all paths stored in the configuration.
 
 ### Organize Files
 ```bash
-python main.py organize
+gniphyl run
 ```
 Organizes files in all configured paths into categorized folders (e.g., `images`, `videos`, etc.).
 
@@ -70,27 +111,29 @@ Organizes files in all configured paths into categorized folders (e.g., `images`
 
 1. Add a new path:
    ```bash
-   python main.py addpath C:\Users\YourName\Downloads
+   gniphyl add /users/name/downloads
    ```
+
 2. List paths:
    ```bash
-   python main.py listpaths
+   gniphyl list
    ```
    Output:
    ```
    Configured paths:
-   1. C:\Users\YourName\Downloads
+   1. /users/name/downloads
    ```
+
 3. Organize files in the paths:
    ```bash
-   python main.py organize
+   gniphyl run
    ```
 
 ---
 
 ## Releases
 
-The compiled executable and installer are available in the [Releases](https://github.com/lubasinkal/file-organizer/releases) section.
+The compiled executables for each platform are available in the [Releases](https://github.com/lubasinkal/gniphyl/releases) section. You can download the appropriate file for your operating system.
 
 ---
 
