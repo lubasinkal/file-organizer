@@ -1,0 +1,59 @@
+name: Build Executable
+
+on:
+  push:
+    tags:
+      - 'v*'  # Run on version tag pushes (e.g., v1.0.0)
+  pull_request:
+    branches:
+      - typer  # Optionally, you can also trigger builds on PRs to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use Ubuntu for Linux build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]  # Build for multiple OSes
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller  # Install PyInstaller to build executables
+
+    - name: Build Executable
+      run: |
+        pyinstaller --onefile main.py  # Build the executable
+
+    - name: Upload Executable to GitHub Release
+      if: success() && matrix.os == 'ubuntu-latest'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/your_script  # Specify the path to the executable in dist/
+
+    - name: Upload Executable to Windows Release
+      if: success() && matrix.os == 'windows-latest'
+      run: |
+        pyinstaller --onefile main.py
+        mv dist/main.exe dist/gniphyl.exe  # Rename for clarity
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/gnipyhl.exe
+
+    - name: Upload Executable to macOS Release
+      if: success() && matrix.os == 'macos-latest'
+      run: |
+        pyinstaller --onefile main.py
+        mv dist/main dist/gniphyl  # Rename for clarity
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/gniphyl
