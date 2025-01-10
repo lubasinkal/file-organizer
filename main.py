@@ -54,11 +54,11 @@ def show_help():
     table.add_column("Description", justify="left")
 
     table.add_row("add", "Add a new path to the configuration.")
+    table.add_row("rm", "Remove a path from the configuration.")
     table.add_row("list", "List all configured paths.")
-    table.add_row("remove", "Remove a path from the configuration.")
-    table.add_row("clear", "Clear all paths.")
+    table.add_row("run", "Run the organization process on the configured paths.")
     table.add_row("--help", "Show this help message.")
-
+    
     console.print(table)
     console.print("\nUse [bold cyan]gniphyl.py COMMAND --help[/bold cyan] for more details about a specific command.")
     console.print("\nFor example:\n  gniphyl.py add --help\n", style="dim")
