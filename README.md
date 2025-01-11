@@ -3,6 +3,10 @@
 Gniphyl is a cross-platform command-line interface (CLI) tool that allows users to organize files within specified directories. It enables users to add, delete, list, and organize directories, ensuring that files are neatly sorted based on their type (e.g., `images`, `videos`, `documents`). This tool is available as an executable for **Windows**, **macOS**, and **Linux**.
 
 ---
+<video width="640" height="360" controls>
+  <source src="assets/start.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Features
 
